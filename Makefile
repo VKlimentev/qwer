@@ -9,3 +9,6 @@ build:
 
 test:
 	go test -v ./...
+
+lint:
+	golangci-lint run ./... --fast --config=./.golangci.yml

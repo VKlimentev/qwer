@@ -15,19 +15,25 @@ import (
 	"github.com/spf13/viper"
 )
 
+const (
+	maxWorkers = 5
+)
+
 func Run() {
 	if err := configs.Init(); err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 
-	r := repository.New()
+	r := repository.New(maxWorkers)
+	defer r.Close()
+
 	s := service.New(r)
 	h := handler.New(s)
 
 	srv := new(server.Server)
 	go func() {
 		if err := srv.Run(viper.GetString("http.port"), h.InitRoutes()); err != nil {
-			logrus.Fatalf("error occured while running http server: %s", err.Error())
+			logrus.Fatalf("error occurred while running http server: %s", err.Error())
 		}
 	}()
 
@@ -37,11 +43,9 @@ func Run() {
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	r.Wg.Wait()
-
 	logrus.Print("Server Shutting Down")
 
 	if err := srv.Shutdown(context.Background()); err != nil {
-		logrus.Errorf("error occured on server shutting down: %s", err.Error())
+		logrus.Errorf("error occurred on server shutting down: %s", err.Error())
 	}
 }
