@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -33,7 +34,7 @@ func TestCreateTask(t *testing.T) {
 		mockService.EXPECT().Create(task).Return("1", nil)
 
 		body := strings.NewReader(`{"method":"GET","url":"http://example.com"}`)
-		req, _ := http.NewRequest("POST", "/task", body)
+		req, _ := http.NewRequestWithContext(context.Background(), "POST", "/task", body)
 		resp := httptest.NewRecorder()
 
 		router.ServeHTTP(resp, req)
@@ -46,7 +47,7 @@ func TestCreateTask(t *testing.T) {
 
 	t.Run("Create task with invalid JSON body", func(t *testing.T) {
 		body := strings.NewReader(`{"method":"GET","url":"http://example.com"`)
-		req, _ := http.NewRequest("POST", "/task", body)
+		req, _ := http.NewRequestWithContext(context.Background(), "POST", "/task", body)
 		resp := httptest.NewRecorder()
 
 		router.ServeHTTP(resp, req)
@@ -62,7 +63,7 @@ func TestCreateTask(t *testing.T) {
 		mockService.EXPECT().Create(task).Return("", errors.New("service error"))
 
 		body := strings.NewReader(`{"method":"GET","url":"http://example.com"}`)
-		req, _ := http.NewRequest("POST", "/task", body)
+		req, _ := http.NewRequestWithContext(context.Background(), "POST", "/task", body)
 		resp := httptest.NewRecorder()
 
 		router.ServeHTTP(resp, req)
@@ -89,7 +90,7 @@ func TestGetTaskStatus(t *testing.T) {
 		taskStatus := &model.TaskStatus{ID: "1", Status: "done", HTTPStatusCode: 200}
 		mockService.EXPECT().Get("1").Return(taskStatus, nil)
 
-		req, _ := http.NewRequest("GET", "/task/1", nil)
+		req, _ := http.NewRequestWithContext(context.Background(), "GET", "/task/1", http.NoBody)
 		resp := httptest.NewRecorder()
 
 		router.ServeHTTP(resp, req)
@@ -103,7 +104,7 @@ func TestGetTaskStatus(t *testing.T) {
 	t.Run("Get task status with service error", func(t *testing.T) {
 		mockService.EXPECT().Get("1").Return(nil, errors.New("service error"))
 
-		req, _ := http.NewRequest("GET", "/task/1", nil)
+		req, _ := http.NewRequestWithContext(context.Background(), "GET", "/task/1", http.NoBody)
 		resp := httptest.NewRecorder()
 
 		router.ServeHTTP(resp, req)

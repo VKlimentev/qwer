@@ -17,6 +17,6 @@ func (s *service) Create(task *model.Task) (string, error) {
 	return s.taskRepository.Create(task)
 }
 
-func (s *service) Get(taskId string) (*model.TaskStatus, error) {
-	return s.taskRepository.Get(taskId)
+func (s *service) Get(taskID string) (*model.TaskStatus, error) {
+	return s.taskRepository.Get(taskID)
 }

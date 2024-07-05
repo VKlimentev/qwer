@@ -44,7 +44,7 @@ func (m *MockTaskService) Create(task *model.Task) (string, error) {
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockTaskServiceMockRecorder) Create(task interface{}) *gomock.Call {
+func (mr *MockTaskServiceMockRecorder) Create(task any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockTaskService)(nil).Create), task)
 }
@@ -59,7 +59,7 @@ func (m *MockTaskService) Get(taskId string) (*model.TaskStatus, error) {
 }
 
 // Get indicates an expected call of Get.
-func (mr *MockTaskServiceMockRecorder) Get(taskId interface{}) *gomock.Call {
+func (mr *MockTaskServiceMockRecorder) Get(taskId any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockTaskService)(nil).Get), taskId)
 }

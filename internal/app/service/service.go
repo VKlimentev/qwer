@@ -8,5 +8,5 @@ import (
 
 type TaskService interface {
 	Create(task *model.Task) (string, error)
-	Get(taskId string) (*model.TaskStatus, error)
+	Get(taskID string) (*model.TaskStatus, error)
 }
