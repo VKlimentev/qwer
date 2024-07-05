@@ -1,0 +1,84 @@
+basePath: /
+definitions:
+  model.Task:
+    properties:
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      method:
+        type: string
+      url:
+        type: string
+    required:
+    - method
+    - url
+    type: object
+  model.TaskStatus:
+    properties:
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      httpStatusCode:
+        type: integer
+      id:
+        type: string
+      length:
+        type: integer
+      status:
+        type: string
+    required:
+    - id
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A Tag service API in Go using Gin framework
+  title: Tasks API
+  version: "1.0"
+paths:
+  /task:
+    post:
+      consumes:
+      - application/json
+      description: Creates a task to fetch content from the given URL
+      parameters:
+      - description: Task Request payload
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/model.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Create a task to fetch content from a URL
+      tags:
+      - Tasks
+  /task/{taskId}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches the status of a task based on the provided task ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TaskStatus'
+      summary: Get the status of a task
+      tags:
+      - Tasks
+swagger: "2.0"
