@@ -38,7 +38,7 @@ func New(maxWorkers int) *repository {
 
 	r := &repository{
 		tasks:      make(map[string]*model.Task),
-		taskQueue:  make(chan *model.Task, maxWorkers),
+		taskQueue:  make(chan *model.Task),
 		maxWorkers: maxWorkers,
 		quit:       make(chan struct{}),
 	}
